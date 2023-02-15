@@ -1,6 +1,7 @@
 ﻿using Pulumi.Automation;
 
 var destroy = args.Any() && args[0] == "destroy";
+var deleteStack = args.Any() && args[0].ToLower() == "deletestack";
 
 var autotagProgram = PulumiFn.Create<TransformationStack>();
 
@@ -23,6 +24,12 @@ if (destroy)
     Console.WriteLine("destroying stack...");
     await stack.DestroyAsync(new DestroyOptions { OnStandardOutput = Console.WriteLine });
     Console.WriteLine("stack destroy complete");
+}
+else if(deleteStack)
+{
+    Console.WriteLine("deleting stack");
+    await stack.Workspace.RemoveStackAsync(StackName);
+    Console.WriteLine("stack deleted");
 }
 else
 {
